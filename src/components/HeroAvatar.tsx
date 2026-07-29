@@ -179,89 +179,7 @@ export default function HeroAvatar() {
     const helixMat = new THREE.LineBasicMaterial({ color: 0x06b6d4, transparent: true, opacity: 0.4 });
     helixGroup.add(new THREE.Line(helixGeo, helixMat));
 
-    // ── Scanning / sweep line ──────────────────────────────────────────────
-    const scanGeo = new THREE.PlaneGeometry(3.4, 0.02);
-    const scanMat = new THREE.MeshBasicMaterial({
-      color: 0x06b6d4, transparent: true, opacity: 0.5,
-      blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide,
-    });
-    const scanLine = new THREE.Mesh(scanGeo, scanMat);
-    scanLine.position.z = 0.3;
-    mainGroup.add(scanLine);
-
-    // ── Facial Recognition Mesh Tracker (Removed as requested) ──────────
-
-
-    // ── Particle Face Overlay ──────────────────────────────────────────────
-    let faceParticles: THREE.Points | null = null;
-    let originalPositions: Float32Array = new Float32Array(0);
-
-    const photoImg2 = new Image();
-    photoImg2.onload = () => {
-      if (isCancelled) return;
-      const aspect2 = photoImg2.naturalWidth / photoImg2.naturalHeight;
-      const iH = 4.0;
-      const iW = iH * aspect2;
-      logRef.current("Particle map compiled successfully.");
-
-      const cvs = document.createElement("canvas");
-      const ctx = cvs.getContext("2d");
-      if (!ctx) return;
-      const W = 90, H = Math.round(90 / aspect2);
-      cvs.width = W; cvs.height = H;
-      ctx.drawImage(photoImg2, 0, 0, W, H);
-      const imgData = ctx.getImageData(0, 0, W, H).data;
-
-      const positions: number[] = [];
-      const colors: number[] = [];
-
-      for (let y = 0; y < H; y++) {
-        for (let x = 0; x < W; x++) {
-          const idx = (y * W + x) * 4;
-          const r = imgData[idx], g = imgData[idx + 1], b = imgData[idx + 2], a = imgData[idx + 3];
-          const brightness = (r + g + b) / 3;
-          if (a < 50 || brightness < 30) continue;
-          if (Math.random() > 0.33) continue;
-
-          const nx = (x / W - 0.5) * iW;
-          const ny = (0.5 - y / H) * iH;
-          const pz = 0.05 + (brightness / 255) * 0.4;
-          positions.push(nx, ny, pz);
-
-          const factor = 0.25;
-          colors.push((r / 255) * factor + 0.05, (g / 255) * factor + 0.4, (b / 255) * factor + 0.6);
-        }
-      }
-
-      const pGeo = new THREE.BufferGeometry();
-      const posArr = new Float32Array(positions);
-      originalPositions = posArr.slice();
-      pGeo.setAttribute("position", new THREE.BufferAttribute(posArr, 3));
-      pGeo.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
-
-      const dotCvs = document.createElement("canvas");
-      dotCvs.width = 16; dotCvs.height = 16;
-      const dotCtx = dotCvs.getContext("2d")!;
-      const dotG = dotCtx.createRadialGradient(8, 8, 0, 8, 8, 8);
-      dotG.addColorStop(0, "rgba(255,255,255,1)");
-      dotG.addColorStop(0.25, "rgba(34,211,238,0.8)");
-      dotG.addColorStop(0.7, "rgba(139,92,246,0.2)");
-      dotG.addColorStop(1, "rgba(0,0,0,0)");
-      dotCtx.fillStyle = dotG;
-      dotCtx.fillRect(0, 0, 16, 16);
-
-      faceParticles = new THREE.Points(pGeo, new THREE.PointsMaterial({
-        size: 0.12, map: new THREE.CanvasTexture(dotCvs), vertexColors: true,
-        transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending, depthWrite: false,
-      }));
-      mainGroup.add(faceParticles);
-      // FIX: particles centered at origin (y=0), matching the photo plane
-      faceParticles.position.set(0, 0, 0.15);
-    };
-    photoImg2.onerror = () => {
-      logRef.current("ERROR: Particle map file load error.");
-    };
-    photoImg2.src = "/avatar.jpg";
+    // ── Scanning line and particle overlay removed for clean photo display ──
 
     // ── Mouse tracking ─────────────────────────────────────────────────────
     const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
@@ -315,26 +233,6 @@ export default function HeroAvatar() {
       sysPanelMat.opacity = 0.87 + Math.cos(t * 9) * 0.05;
 
       helixMat.opacity = 0.3 + Math.sin(t * 2) * 0.15;
-      scanLine.position.y = -2.1 + ((t * 0.8) % 4.2);
-      scanMat.opacity = 0.45 + Math.sin(t * 8) * 0.15;
-
-      // Face particle breathing animation
-      if (faceParticles?.geometry && originalPositions.length > 0) {
-        const posAttr = faceParticles.geometry.attributes.position as THREE.BufferAttribute;
-        const arr = posAttr.array as Float32Array;
-        for (let i = 0; i < arr.length / 3; i++) {
-          const ox = originalPositions[i * 3];
-          const oy = originalPositions[i * 3 + 1];
-          const oz = originalPositions[i * 3 + 2];
-          const wave = Math.sin(t * 1.6 + oy * 0.5) * 0.025;
-          arr[i * 3]     = ox + wave * Math.sin(ox * 2);
-          arr[i * 3 + 1] = oy + wave * 0.5;
-          arr[i * 3 + 2] = oz + wave * 0.8;
-        }
-        posAttr.needsUpdate = true;
-      }
-
-      // Scanner animation removed
 
       renderer.render(scene, camera);
     };
@@ -513,8 +411,8 @@ export default function HeroAvatar() {
         </div>
       </div>
 
-      {/* Dark radial vignette overlay */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0)_20%,#020208_88%)] pointer-events-none z-10" />
+      {/* Subtle edge vignette — only edges, not center */}
+      <div className="absolute inset-0 pointer-events-none z-10" style={{ background: "radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(2,2,8,0.55) 100%)" }} />
 
       {/* Three.js canvas — transparent background; holographic FX float above photo */}
       <div ref={containerRef} className="absolute inset-0 cursor-grab active:cursor-grabbing z-20" />
