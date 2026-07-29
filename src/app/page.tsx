@@ -366,11 +366,11 @@ export default function Home() {
 
                   <ul className="space-y-3 font-sans text-sm text-slate-400 mb-6">
                     {[
-                      "Constructed data pre-processing and parsing algorithms for machine learning targets",
-                      "Audited host endpoints, networks, and communication protocols against vulnerability maps",
-                      "Automated server logging tasks and data scraping runs via python script executors",
-                      "Built clear visualization panels and charts to represent dynamic analytics data",
-                      "Evaluated host defenses using vulnerability scanners and security auditing toolsets"
+                      "Constructed data pre-processing and parsing algorithms for machine learning model targets",
+                      "Trained and evaluated classification models using supervised and unsupervised learning techniques",
+                      "Automated data scraping and ETL pipeline runs via Python script executors",
+                      "Built clear visualization panels and charts to represent dynamic ML analytics data",
+                      "Implemented computer vision workflows using YOLOv8 for real-time object detection tasks"
                     ].map((bullet, idx) => (
                       <li key={idx} className="flex gap-2.5 items-start">
                         <ChevronRight className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" />
@@ -381,7 +381,7 @@ export default function Home() {
 
                   {/* Core skills tags for this specific role */}
                   <div className="flex flex-wrap gap-1.5 border-t border-slate-900/80 pt-4">
-                    {["Machine Learning", "Cybersecurity", "Python Automation", "Data Visualization", "Security Tools"].map((tech) => (
+                    {["Machine Learning", "Deep Learning", "Python Automation", "Data Visualization", "Computer Vision"].map((tech) => (
                       <span key={tech} className="px-2 py-1 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono text-cyan-300">
                         {tech}
                       </span>
