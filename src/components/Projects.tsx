@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { Shield, Eye, TrendingDown, Target, Navigation, Mail, RefreshCw, Cpu, Activity, Play } from "lucide-react";
+import { Shield, Eye, TrendingDown, Target, Navigation, Mail, RefreshCw, Cpu, Activity, FileText, CheckCircle2, Sparkles, Layers, Users, Kanban, HelpCircle } from "lucide-react";
 
 interface Project {
   title: string;
@@ -26,10 +26,7 @@ function PotAlertSimulator() {
     if (!isPlaying) return;
 
     const interval = setInterval(() => {
-      // Simulate pothole detections every few seconds
       setDetected(true);
-      
-      // randomize slightly around Kasaragod
       const randLat = (12.4996 + (Math.random() - 0.5) * 0.005).toFixed(4);
       const randLng = (75.0079 + (Math.random() - 0.5) * 0.005).toFixed(4);
       setCoords({ lat: `${randLat}° N`, lng: `${randLng}° E` });
@@ -47,13 +44,9 @@ function PotAlertSimulator() {
 
   return (
     <div className="w-full h-44 rounded-2xl bg-slate-950 border border-slate-900 overflow-hidden relative font-mono text-[10px] text-cyan-400">
-      {/* Simulation Background Screen */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(6,182,212,0.08)_0%,transparent_80%)]" />
-
-      {/* Grid backing lines */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:16px_16px] opacity-10" />
 
-      {/* Mock Video Stream of Road */}
       <div className="absolute inset-0 flex flex-col justify-between p-3 z-10">
         <div className="flex justify-between items-center border-b border-cyan-500/20 pb-1">
           <div className="flex items-center gap-1">
@@ -63,13 +56,10 @@ function PotAlertSimulator() {
           <span className="text-[9px] text-slate-500">60 FPS // HD</span>
         </div>
 
-        {/* Dynamic Road Animation */}
         <div className="flex-1 w-full flex items-center justify-center relative overflow-hidden">
-          {/* Vanishing road lines */}
           <div className="absolute w-[2px] h-full bg-slate-800/40 rotate-12 left-1/3" />
           <div className="absolute w-[2px] h-full bg-slate-800/40 -rotate-12 right-1/3" />
 
-          {/* Drifting Road Center dashes */}
           {isPlaying && (
             <div className="absolute w-[3px] h-full flex flex-col gap-6 items-center top-0">
               <div className="w-1 h-8 bg-slate-600 animate-[panDown_1.2s_linear_infinite]" />
@@ -77,7 +67,6 @@ function PotAlertSimulator() {
             </div>
           )}
 
-          {/* Pothole Bounding Box Detection overlay */}
           {detected ? (
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
@@ -96,7 +85,6 @@ function PotAlertSimulator() {
           )}
         </div>
 
-        {/* Telemetry Footer */}
         <div className="border-t border-cyan-500/20 pt-1 flex justify-between text-[8px] text-slate-400">
           <span>LATENCY: 14.2ms</span>
           <span>CONFIDENCE: {confidence}%</span>
@@ -138,7 +126,6 @@ function PriceTrackerSimulator() {
     const interval = setInterval(() => {
       setLogs((prev) => {
         const nextLogs = [...prev, events[currentEvent]];
-        // keep only last 5 lines for screen fit
         if (nextLogs.length > 5) {
           nextLogs.shift();
         }
@@ -152,10 +139,8 @@ function PriceTrackerSimulator() {
 
   return (
     <div className="w-full h-44 rounded-2xl bg-slate-950 border border-slate-900 p-3 overflow-hidden relative font-mono text-[9px] text-purple-400 flex flex-col justify-between">
-      {/* Simulation Screen Overlay */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(168,85,247,0.08)_0%,transparent_80%)]" />
 
-      {/* Terminal Title */}
       <div className="flex justify-between items-center border-b border-purple-500/20 pb-1 z-10 text-slate-400">
         <div className="flex items-center gap-1.5 font-bold">
           <Activity className="w-3.5 h-3.5 text-purple-400 animate-pulse" />
@@ -164,7 +149,6 @@ function PriceTrackerSimulator() {
         <span>CYCLE: 24H</span>
       </div>
 
-      {/* Scrolling logs screen */}
       <div className="flex-1 flex flex-col gap-1 py-2 z-10">
         {logs.map((log, index) => {
           let clr = "text-slate-400";
@@ -181,11 +165,102 @@ function PriceTrackerSimulator() {
         })}
       </div>
 
-      {/* Analytics telemetry metrics */}
       <div className="border-t border-purple-500/20 pt-1 flex justify-between text-[8px] text-slate-500 z-10 font-bold">
         <span>ITEMS_TRACKED: 154</span>
         <span>SMTP: ONLINE</span>
         <span>EFFICIENCY: +20%</span>
+      </div>
+    </div>
+  );
+}
+
+// 3. HireSense AI Live Simulator card content
+function HireSenseSimulator() {
+  const candidates = [
+    { name: "ALEX_R_RESUME.PDF", score: 96, role: "Full-Stack AI Engineer", status: "MATCH_EXCELLENT", matchColor: "text-emerald-400 border-emerald-500/40 bg-emerald-950/30" },
+    { name: "SARAH_M_DEV.PDF", score: 91, role: "Backend FastAPI Architect", status: "MATCH_HIGH", matchColor: "text-cyan-400 border-cyan-500/40 bg-cyan-950/30" },
+    { name: "DAVID_K_CV.PDF", score: 88, role: "React & ML Engineer", status: "INTERVIEW_READY", matchColor: "text-purple-400 border-purple-500/40 bg-purple-950/30" },
+  ];
+
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [parsingStep, setParsingStep] = useState(0);
+  const steps = ["PARSING_PDF_TEXT", "SEMANTIC_JOB_MATCHING", "GENERATING_ATS_SCORE", "AI_INTERVIEW_QUESTIONS"];
+
+  useEffect(() => {
+    const stepInterval = setInterval(() => {
+      setParsingStep((prev) => (prev + 1) % steps.length);
+    }, 1800);
+
+    const candidateInterval = setInterval(() => {
+      setActiveIdx((prev) => (prev + 1) % candidates.length);
+    }, 7200);
+
+    return () => {
+      clearInterval(stepInterval);
+      clearInterval(candidateInterval);
+    };
+  }, [steps.length, candidates.length]);
+
+  const activeCand = candidates[activeIdx];
+
+  return (
+    <div className="w-full h-44 rounded-2xl bg-slate-950 border border-slate-900 p-3 overflow-hidden relative font-mono text-[9px] text-emerald-400 flex flex-col justify-between">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.08)_0%,transparent_80%)]" />
+
+      {/* Simulator Header */}
+      <div className="flex justify-between items-center border-b border-emerald-500/20 pb-1 z-10 text-slate-400">
+        <div className="flex items-center gap-1.5 font-bold">
+          <Sparkles className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
+          <span>HIRESENSE_ATS: AI_PARSER</span>
+        </div>
+        <span className="text-[8px] bg-emerald-950/60 border border-emerald-800/40 text-emerald-400 px-1.5 py-0.5 rounded uppercase">
+          12 MODULES ACTIVE
+        </span>
+      </div>
+
+      {/* Active Candidate Evaluation Card */}
+      <div className="flex-1 flex flex-col justify-between py-2 z-10">
+        <div className="flex justify-between items-start">
+          <div>
+            <div className="flex items-center gap-1 text-slate-200 font-bold text-[10px]">
+              <FileText className="w-3 h-3 text-emerald-400" />
+              <span>{activeCand.name}</span>
+            </div>
+            <span className="text-slate-500 text-[8px] block mt-0.5">TARGET: {activeCand.role}</span>
+          </div>
+
+          <div className={`px-2 py-0.5 rounded border text-[9px] font-bold ${activeCand.matchColor}`}>
+            ATS: {activeCand.score}%
+          </div>
+        </div>
+
+        {/* Live Parsing Progress Bar */}
+        <div className="my-1 space-y-1">
+          <div className="flex justify-between text-[8px] text-slate-400">
+            <span>PIPELINE: {steps[parsingStep]}</span>
+            <span className="text-emerald-400">{(parsingStep + 1) * 25}%</span>
+          </div>
+          <div className="w-full h-1.5 bg-slate-900 rounded-full overflow-hidden">
+            <motion.div
+              className="h-full bg-gradient-to-r from-emerald-500 via-cyan-500 to-purple-500"
+              animate={{ width: `${(parsingStep + 1) * 25}%` }}
+              transition={{ duration: 0.5 }}
+            />
+          </div>
+        </div>
+
+        {/* Generated Interview Question Snippet */}
+        <div className="bg-slate-900/60 border border-slate-800/60 rounded p-1.5 flex items-center gap-1.5 text-slate-300 text-[8px]">
+          <HelpCircle className="w-3 h-3 text-cyan-400 flex-shrink-0" />
+          <span className="truncate italic">"Generated AI Q: Describe how you structured PostgreSQL schemas with FastAPI & React..."</span>
+        </div>
+      </div>
+
+      {/* Footer analytics metrics */}
+      <div className="border-t border-emerald-500/20 pt-1 flex justify-between text-[8px] text-slate-500 z-10 font-bold">
+        <span>KANBAN: SYNCED</span>
+        <span>POSTGRES: ONLINE</span>
+        <span>ACCURACY: 96.4%</span>
       </div>
     </div>
   );
@@ -196,7 +271,6 @@ function ProjectCard({ project }: { project: Project }) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
-  // Spring physics for smooth card tilting
   const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [10, -10]), { damping: 22, stiffness: 280 });
   const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-10, 10]), { damping: 22, stiffness: 280 });
 
@@ -228,23 +302,16 @@ function ProjectCard({ project }: { project: Project }) {
       }}
       className="w-full relative group cursor-pointer"
     >
-      {/* Dynamic Glow Backing */}
       <div
         className="absolute inset-0 rounded-3xl blur-3xl opacity-0 group-hover:opacity-30 transition-opacity duration-500 -z-10"
         style={{ backgroundColor: project.glowClr }}
       />
 
-      {/* Main Glass Panel */}
       <div className="h-full rounded-3xl bg-slate-950/50 border border-slate-900 p-6 md:p-8 backdrop-blur-2xl transition-all duration-300 group-hover:border-purple-500/20 relative overflow-hidden flex flex-col justify-between">
-        
-        {/* Fine background tech matrix grids */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:24px_24px] opacity-[0.02] group-hover:opacity-[0.05] transition-opacity" />
-
-        {/* Scanline visual overlay effect */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.12)_50%)] bg-[size:100%_4px] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
         <div>
-          {/* Header Row */}
           <div className="flex justify-between items-start mb-4">
             <div>
               <span className="font-mono text-[9px] text-slate-500 uppercase tracking-widest block mb-1">
@@ -265,12 +332,10 @@ function ProjectCard({ project }: { project: Project }) {
             {project.tagline}
           </p>
 
-          {/* Project Simulation Widget (Real-time Showcase) */}
           <div className="mb-6">
             {project.simulation}
           </div>
 
-          {/* Technology Tags */}
           <div className="flex flex-wrap gap-1.5 mb-6">
             {project.technologies.map((tech, idx) => (
               <span
@@ -282,7 +347,6 @@ function ProjectCard({ project }: { project: Project }) {
             ))}
           </div>
 
-          {/* Bullet points features list */}
           <ul className="space-y-3 mb-6">
             {project.features.map((feat, idx) => (
               <li key={idx} className="flex items-start gap-2.5 text-xs md:text-sm text-slate-400 group-hover:text-slate-300 transition-colors">
@@ -295,7 +359,6 @@ function ProjectCard({ project }: { project: Project }) {
           </ul>
         </div>
 
-        {/* Card Footer action panel */}
         <div className="border-t border-slate-900/80 pt-4 flex items-center justify-between text-[10px] font-mono text-slate-500 group-hover:text-slate-300 transition-colors">
           <span>SOURCE_CHANNELS: MOUNTED</span>
           <span className="flex items-center gap-1 text-cyan-400 group-hover:underline font-bold">
@@ -309,6 +372,20 @@ function ProjectCard({ project }: { project: Project }) {
 
 export default function Projects() {
   const projectsData: Project[] = [
+    {
+      title: "HireSense AI",
+      tagline: "Intelligent Resume Screening & Recruitment Platform",
+      technologies: ["React", "FastAPI", "PostgreSQL", "Python", "OpenAI / LLM", "ATS Engine"],
+      glowClr: "rgba(16, 185, 129, 0.4)",
+      metric: "12 Integrated Modules",
+      features: [
+        { icon: <Sparkles className="w-4 h-4 text-emerald-400" />, text: "AI Resume parsing, semantic job matching & dynamic ATS score generation" },
+        { icon: <HelpCircle className="w-4 h-4 text-cyan-400" />, text: "AI-powered automated candidate interview question generation" },
+        { icon: <Kanban className="w-4 h-4 text-purple-400" />, text: "Full recruiter dashboard, candidate management & Kanban application pipeline" },
+        { icon: <Layers className="w-4 h-4 text-emerald-400" />, text: "12 complete modules including Dashboard, Jobs, Candidates, Interview Scheduler, Notifications, and Analytics" },
+      ],
+      simulation: <HireSenseSimulator />,
+    },
     {
       title: "PotAlert",
       tagline: "AI-Based Smart Pothole Detection System",
@@ -340,7 +417,7 @@ export default function Projects() {
   ];
 
   return (
-    <div className="max-w-5xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+    <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-3 gap-8 pt-4">
       {projectsData.map((project, index) => (
         <ProjectCard key={index} project={project} />
       ))}

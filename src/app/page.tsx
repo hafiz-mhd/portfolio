@@ -359,7 +359,7 @@ export default function Home() {
                     </div>
                     <div>
                       <span className="text-[10px] font-mono text-cyan-400 uppercase tracking-wider block font-bold">2023</span>
-                      <h3 className="text-xl font-bold text-slate-100 group-hover:text-cyan-300 transition-colors">Cybersecurity &amp; AI Intern</h3>
+                      <h3 className="text-xl font-bold text-slate-100 group-hover:text-cyan-300 transition-colors">AI &amp; ML Intern</h3>
                       <h4 className="text-sm font-mono text-slate-400 mt-0.5 font-semibold">KELTRON</h4>
                     </div>
                   </div>
